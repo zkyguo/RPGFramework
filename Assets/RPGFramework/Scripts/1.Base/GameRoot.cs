@@ -4,15 +4,24 @@ using UnityEngine;
 
 public class GameRoot : BaseSingletonMono<GameRoot>
 {
-    // Start is called before the first frame update
-    void Start()
+    protected override void Awake()
     {
-        
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        base.Awake();
+        DontDestroyOnLoad(gameObject);
+        InitManager();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void InitManager()
     {
-        
+        BaseManager[] managers = GetComponents<BaseManager>();
+        for (int i = 0; i < managers.Length; i++)
+        {
+            managers[i].Init();
+        }
     }
 }

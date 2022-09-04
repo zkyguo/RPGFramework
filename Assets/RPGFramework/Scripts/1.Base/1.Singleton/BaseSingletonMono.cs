@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class BaseSingletonMono<T> : MonoBehaviour where T :  BaseSingletonMono<T>
 {
-    public static T instance;
+    public static T Instance;
 
     protected virtual void Awake() // protected : Child can acces to this method. Virtual : child can override this method
     {
-        instance = this as T;
+        Instance = this as T;
     }
 }
