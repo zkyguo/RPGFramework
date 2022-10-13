@@ -11,7 +11,7 @@ public class Test : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            PoolManager.Instance.GetGameobject<Bullet>(Bullet);
+            PoolManager.Instance.GetGameobject<Bullet>(Bullet, null);
         }
         
     }

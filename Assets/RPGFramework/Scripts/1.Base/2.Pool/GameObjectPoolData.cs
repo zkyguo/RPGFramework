@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 
+/// <summary>
+/// GameObject pool 
+/// </summary>
 public class GameObjectPoolData
 {
     //Pool Root
@@ -16,7 +19,6 @@ public class GameObjectPoolData
         //Create root node and attach it to Scene
         RootNode = new GameObject(obj.name);
         RootNode.transform.SetParent(RootNodeWanted.transform);
-        
         this.PoolQueue = new Queue<GameObject>();
         PushObj(obj);
     }
@@ -36,19 +38,25 @@ public class GameObjectPoolData
     }
 
     /// <summary>
-    /// take out gameobject of pool
+    /// take out gameobject from pool
     /// </summary>
     /// <returns></returns>
-    public GameObject GetObj()
+    public GameObject GetObj(Transform parent = null)
     {
         GameObject obj = PoolQueue.Dequeue();
         // Display obj
         obj.SetActive(true);
-        // Dettach obj from parent
-        obj.transform.parent = null;
-        // Return to default Scence
-        SceneManager.MoveGameObjectToScene(obj,  SceneManager.GetActiveScene());
-        
+        //Set parent
+        obj.transform.SetParent(parent);
+
+        if (parent == null)
+        {
+            // Return to default Scence
+            SceneManager.MoveGameObjectToScene(obj, SceneManager.GetActiveScene());
+        }
+
+  
+
         return obj;
     }
 }
