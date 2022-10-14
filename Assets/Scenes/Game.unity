@@ -134,6 +134,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameRoot
       objectReference: {fileID: 0}
+    - target: {fileID: 6082683256843961358, guid: 19d58d9ea28061d40b9c400e0163a367, type: 3}
+      propertyPath: Bullet
+      value: 
+      objectReference: {fileID: 294389763296426227, guid: 6cf8a7790a020524090ce65b2c409cb0, type: 3}
     - target: {fileID: 7796858673243564945, guid: 19d58d9ea28061d40b9c400e0163a367, type: 3}
       propertyPath: m_RootOrder
       value: 2

@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Runtime.Remoting;
 using UnityEngine;
+using UnityEngine.Accessibility;
 
 public class PoolManager : BaseManager<PoolManager>
 {
@@ -34,7 +36,7 @@ public class PoolManager : BaseManager<PoolManager>
     /// <param name="prefab"></param>
     /// <typeparam name="T">The component which you need</typeparam>
     /// <returns></returns>
-    public T GetGameobject<T>(GameObject prefab, Transform parent) where T : UnityEngine.Object
+    public T GetGameobject<T>(GameObject prefab, Transform parent = null) where T : UnityEngine.Object
     {
         GameObject obj = GetGameobject(prefab, parent);
         if (obj != null)
@@ -50,7 +52,7 @@ public class PoolManager : BaseManager<PoolManager>
     /// </summary>
     /// <param name="prefab"></param>
     /// <returns></returns>
-    public GameObject GetGameobject (GameObject prefab, Transform parent) 
+    public GameObject GetGameobject (GameObject prefab, Transform parent = null) 
     {
         GameObject obj = null;
         string name = prefab.name;
@@ -152,13 +154,58 @@ public class PoolManager : BaseManager<PoolManager>
     }
     #endregion
 
-
-    public void Clear(bool wantClearObject = true)
+    #region Clear 
+    /// <summary>
+    /// Clear pool
+    /// </summary>
+    /// <param name="clearGameObject">Should clear GameObject pool?</param>
+    /// <param name="clearObject">Should clear non-GameObject pool?</param>
+    public void Clear(bool clearGameObject = true, bool clearObject = true)
     {
-        GameObjectPoolDic.Clear();
-        if(wantClearObject)
+        if (clearGameObject)
         {
-            ObjectPoolDic.Clear();
+            for(int i = 0; i < PoolRootObj.transform.childCount; i++)
+            {
+                Destroy(PoolRootObj.transform.GetChild(0).gameObject);
+            }
+            GameObjectPoolDic.Clear();
+        }
+        if (clearObject) ObjectPoolDic.Clear();
+    }
+
+    public void ClearGameOjectPool()
+    {
+        Clear(true, false);
+    }
+    
+    public void ClearGameObject(string prefabName)
+    {
+        GameObject obj = PoolRootObj.transform.Find(prefabName).gameObject;
+        if(obj != null)
+        {
+            Destroy(obj.gameObject);
+            GameObjectPoolDic.Remove(prefabName);
         }
     }
+
+    public void ClearGameObject(GameObject prefab)
+    {
+        ClearGameObject(prefab.name);
+    }
+
+    public void ClearObjectPool()
+    {
+        Clear(false, true); 
+    }
+
+    public void ClearObject<T>()
+    {
+        ObjectPoolDic.Remove(typeof(T).FullName);
+    }
+
+    public void ClearObject(Type type)
+    {
+        ObjectPoolDic.Remove(type.FullName);
+    }
+    #endregion
 }
