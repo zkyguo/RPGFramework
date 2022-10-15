@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 806075711900585780}
   - component: {fileID: 6082683256843961358}
   - component: {fileID: 6082683256843961361}
+  - component: {fileID: 1506375701}
   m_Layer: 0
   m_Name: GameRoot
   m_TagString: Untagged
@@ -46,6 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44ee068f29bcd4b419cf6cff0f2bfab0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gameSetting: {fileID: 11400000, guid: 66f4c75a9c3b1b54495379d4d8f1c09c, type: 2}
 --- !u!114 &6082683256843961358
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58,7 +60,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e5f86beb442cdb4ea6749824f375c86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Bullet: {fileID: 3815415832153206466, guid: fe325486963b5974292f5354f9eb33da, type: 3}
+  Bullet: {fileID: 294389763296426227, guid: 6cf8a7790a020524090ce65b2c409cb0, type: 3}
 --- !u!114 &6082683256843961361
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72,6 +74,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PoolRootObj: {fileID: 6082683256519852441}
+--- !u!114 &1506375701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3868216699542132810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2a22c9a1b2029142a68a35e55ffd3ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  configSetting: {fileID: 11400000, guid: 85553990f8a4b5f4ea1d45b2e6343407, type: 2}
 --- !u!1 &6082683256519852441
 GameObject:
   m_ObjectHideFlags: 0
