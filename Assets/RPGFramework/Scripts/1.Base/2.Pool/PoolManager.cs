@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Runtime.Remoting;
 using UnityEngine;
 using UnityEngine.Accessibility;
@@ -100,6 +101,27 @@ public class PoolManager : BaseManager<PoolManager>
     {
         string name = prefab.name;
         return GameObjectPoolDic.ContainsKey(name) && GameObjectPoolDic[name].PoolQueue.Count > 0;
+    }
+
+
+    /// <summary>
+    /// Check if gameObject exists in cache, if yes load it
+    /// </summary>
+    /// <param name="path"></param>
+    /// <param name="parent"></param>
+    /// <returns></returns>
+    public GameObject CheckCacheAndLoadGameObject(string path, Transform parent = null)
+    {
+        //using path to get prefab name
+        string[] pathSplit = path.Split('/');
+        string prefabName = pathSplit[pathSplit.Length - 1];
+        //Get prefab in pool by prefabName found
+        if (GameObjectPoolDic.ContainsKey(prefabName) && GameObjectPoolDic[prefabName].PoolQueue.Count > 0)
+        {
+            return GameObjectPoolDic[prefabName].GetObj();
+        }
+
+        return null;
     }
     #endregion
 
