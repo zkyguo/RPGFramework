@@ -32,6 +32,37 @@ public static class RPGExtension
     {
         return type.GetCustomAttribute<T>();
     }
-    
+
+    #endregion
+
+    #region Resource Manage
+
+    /// <summary>
+    /// put GameObject in pool
+    /// </summary>
+    /// <param name="obj"></param>
+    public static void GameObjectPushPool(this GameObject obj)
+    {
+        PoolManager.Instance.PushGameobject(obj);
+    }
+
+    /// <summary>
+    /// put Component in pool
+    /// </summary>
+    /// <param name="component"></param>
+    public static void GameObjectPushPool(this Component component)
+    {
+        PoolManager.Instance.PushGameobject(component.gameObject);
+    }
+
+    /// <summary>
+    /// put non-gameobject Object in pool
+    /// </summary>
+    /// <param name="obj"></param>
+    public static void ObjectPushPool(this object obj)
+    {
+        PoolManager.Instance.PushObject(obj);
+    }
+
     #endregion
 }

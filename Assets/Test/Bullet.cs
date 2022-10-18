@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Pool]
 public class Bullet : MonoBehaviour
 {
     private void Awake()

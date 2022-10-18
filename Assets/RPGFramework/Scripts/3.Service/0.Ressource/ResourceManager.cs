@@ -11,8 +11,7 @@ public class ResourceManager : BaseManager<ResourceManager>
     public override void Init()
     {
         base.Init(); 
-        CacheDic = new Dictionary<Type, bool>();
-        CacheDic.Add(typeof(Bullet), true);
+        CacheDic = GameRoot.Instance.GameSetting.CacheDic;
         
     }
 
@@ -94,11 +93,11 @@ public class ResourceManager : BaseManager<ResourceManager>
     }
 
     /// <summary>
-/// Load asy assets in unity
-/// </summary>
-/// <typeparam name="T"></typeparam>
-/// <param name="path"></param>
-/// <param name="callBack"></param>
+    /// Load asy assets in unity
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="path"></param>
+    /// <param name="callBack"></param>
     public void LoadAssetAsync<T>(string path, Action<T> callBack) where T : UnityEngine.Object
     {
         StartCoroutine(ExecuteLoadAsset<T>(path, callBack));
