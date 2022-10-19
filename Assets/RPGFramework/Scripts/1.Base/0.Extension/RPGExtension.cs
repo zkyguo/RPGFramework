@@ -33,6 +33,35 @@ public static class RPGExtension
         return type.GetCustomAttribute<T>();
     }
 
+    /// <summary>
+    /// Check if two arrays are equals by comparing all their elements
+    /// </summary>
+    /// <param name="objects"></param>
+    /// <param name="other"></param>
+    /// <returns></returns>
+    public static bool ArrayEquals(this object[] objects, object[] other)
+    {
+        if(other == null || objects.GetType() != other.GetType())
+        {
+            return false;
+        }
+
+        if(objects.Length == other.Length)
+        {
+            for(int i = 0; i < objects.Length; i++)
+            {
+                if (objects[i] != other[i])
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        return false;
+
+    }
+
     #endregion
 
     #region Resource Manage
