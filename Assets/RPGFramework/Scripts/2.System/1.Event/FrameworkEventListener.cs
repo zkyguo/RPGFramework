@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,6 +11,32 @@ public interface IMouseEvent : IPointerEnterHandler, IPointerExitHandler, IPoint
 
 }
 
+/// <summary>
+/// Event Type
+/// </summary>
+public enum FrameworkEventType
+{
+    OnMouseEnter,
+    OnMouseExit,
+    OnClick,
+    OnClickDown,
+    OnClickUp,
+    OnDrag,
+    OnBeginDrag,
+    OnEndDrag,
+    OnCollisionEnter,
+    OnCollisionStay,
+    OnCollisionExit,
+    OnCollisionEnter2D,
+    OnCollisionStay2D,
+    OnCollisionExit2D,
+    OnTriggerEnter,
+    OnTriggerStay,
+    OnTriggerExit,
+    OnTriggerEnter2D,
+    OnTriggerStay2D,
+    OnTriggerExit2D
+}
 
 /// <summary>
 /// Event manager : Mouse, Collision, Trigger
@@ -47,7 +72,8 @@ public class FrameworkEventListener : MonoBehaviour, IMouseEvent
     /// Data which contains many FrameworkEventListenerInfo
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    private class FrameworkEventListenerInfos<T>
+    [Pool]
+    private class FrameworkEventListenerInfos<T> : IFrameworkEventListenerInfos
     {
         //All event
         private List<FrameworkEventListenerInfo<T>> eventList = new List<FrameworkEventListenerInfo<T>>();
@@ -124,125 +150,198 @@ public class FrameworkEventListener : MonoBehaviour, IMouseEvent
     }
 
     #endregion
-    #region Mouse Events
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-        throw new System.NotImplementedException();
+
+    interface IFrameworkEventListenerInfos {
+
+        void RemoveAll();
     }
 
-    public void OnDrag(PointerEventData eventData)
+    private Dictionary<FrameworkEventType, IFrameworkEventListenerInfos> eventInfoDic = new Dictionary<FrameworkEventType, IFrameworkEventListenerInfos>();
+
+    #region Externel acces
+
+    /// <summary>
+    /// Add event listener 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="eventType"></param>
+    /// <param name="action"></param>
+    /// <param name="checkArgs"></param>
+    /// <param name="args"></param>
+    public void AddListener<T>(FrameworkEventType eventType, Action<T, object[]> action, bool checkArgs =false, params object[] args)
     {
-        throw new System.NotImplementedException();
+        //if event exists in pool, get it
+        if(eventInfoDic.ContainsKey(eventType))
+        {
+            var eventInfos = eventInfoDic[eventType] as FrameworkEventListenerInfos<T>;
+            eventInfos.AddListener(action, checkArgs, args);
+        }
+        //if not add it in pool, infos and Dic
+        else
+        {
+            FrameworkEventListenerInfos<T> infos = ResourceManager.Instance.Load<FrameworkEventListenerInfos<T>>();
+            infos.AddListener(action, checkArgs, args);
+            eventInfoDic.Add(eventType, infos);
+        }
+
     }
 
-    public void OnEndDrag(PointerEventData eventData)
+    /// <summary>
+    /// Remove Listener
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="eventType"></param>
+    /// <param name="action"></param>
+    /// <param name="checkArgs"></param>
+    /// <param name="args"></param>
+    public void RemoveListener<T>(FrameworkEventType eventType, Action<T, object[]> action, bool checkArgs = false, params object[] args)
     {
-        throw new System.NotImplementedException();
+        if(eventInfoDic.ContainsKey(eventType))
+        {
+            (eventInfoDic[eventType] as FrameworkEventListenerInfos<T>)?.RemoveListener(action, checkArgs, args);    
+        }
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    /// <summary>
+    /// Remove All eventType 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="eventType"></param>
+    public void RemoveAllListener<T>(FrameworkEventType eventType)
     {
-        throw new System.NotImplementedException();
+        if (eventInfoDic.ContainsKey(eventType))
+        {
+            (eventInfoDic[eventType] as FrameworkEventListenerInfos<T>)?.RemoveAll();
+        }
     }
 
-    public void OnPointerDown(PointerEventData eventData)
+    /// <summary>
+    /// Clear all event
+    /// </summary>
+    public void RemoveAllListener()
     {
-        throw new System.NotImplementedException();
+        foreach (var infos in eventInfoDic.Values)
+        {
+            (infos as IFrameworkEventListenerInfos).RemoveAll();
+        }
+        eventInfoDic.Clear();
+
+    }
+    #endregion
+
+    /// <summary>
+    /// Trigger event
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="eventType"></param>
+    /// <param name="eventData"></param>
+    private void TriggerAction<T>(FrameworkEventType eventType, T eventData)
+    {
+        if(eventInfoDic.ContainsKey(eventType))
+        {
+            (eventInfoDic[eventType] as FrameworkEventListenerInfos<T>).TriggerEvent(eventData);
+        }
     }
 
+    #region Mouse event
     public void OnPointerEnter(PointerEventData eventData)
     {
-        throw new System.NotImplementedException();
+        TriggerAction(FrameworkEventType.OnMouseEnter, eventData);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        throw new System.NotImplementedException();
+        TriggerAction(FrameworkEventType.OnMouseExit, eventData);
+    }
+
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        TriggerAction(FrameworkEventType.OnBeginDrag, eventData);
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        TriggerAction(FrameworkEventType.OnDrag, eventData);
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        TriggerAction(FrameworkEventType.OnEndDrag, eventData);
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        TriggerAction(FrameworkEventType.OnClick, eventData);
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        TriggerAction(FrameworkEventType.OnClickDown, eventData);
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        throw new System.NotImplementedException();
+        TriggerAction(FrameworkEventType.OnClickUp, eventData);
     }
-
     #endregion
 
     #region Collision Event
-
     private void OnCollisionEnter(Collision collision)
     {
-        
+        TriggerAction(FrameworkEventType.OnCollisionEnter, collision);
     }
-
     private void OnCollisionStay(Collision collision)
     {
-        
+        TriggerAction(FrameworkEventType.OnCollisionStay, collision);
     }
-
     private void OnCollisionExit(Collision collision)
     {
-        
+        TriggerAction(FrameworkEventType.OnCollisionExit, collision);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        
+        TriggerAction(FrameworkEventType.OnCollisionEnter2D, collision);
     }
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-
+        TriggerAction(FrameworkEventType.OnCollisionStay2D, collision);
     }
-
     private void OnCollisionExit2D(Collision2D collision)
     {
-        
+        TriggerAction(FrameworkEventType.OnCollisionExit2D, collision);
     }
-
     #endregion
 
-    #region TriggerEvent
-
+    #region Trigger Event
     private void OnTriggerEnter(Collider other)
     {
-        
+        TriggerAction(FrameworkEventType.OnTriggerEnter, other);
     }
-
     private void OnTriggerStay(Collider other)
     {
-        
+        TriggerAction(FrameworkEventType.OnTriggerStay, other);
     }
-
     private void OnTriggerExit(Collider other)
     {
-        
+        TriggerAction(FrameworkEventType.OnTriggerExit, other);
     }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        
+        TriggerAction(FrameworkEventType.OnTriggerEnter2D, collision);
     }
-
     private void OnTriggerStay2D(Collider2D collision)
     {
-        
+        TriggerAction(FrameworkEventType.OnTriggerStay2D, collision);
     }
-
     private void OnTriggerExit2D(Collider2D collision)
     {
-        
+        TriggerAction(FrameworkEventType.OnTriggerExit2D, collision);
     }
+
+
     #endregion
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
