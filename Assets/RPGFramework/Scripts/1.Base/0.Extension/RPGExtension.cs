@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using Unity.Rendering.HybridV2;
 using UnityEngine;
 
 /// <summary>
@@ -50,7 +51,7 @@ public static class RPGExtension
         {
             for(int i = 0; i < objects.Length; i++)
             {
-                if (objects[i] != other[i])
+                if (!objects[i].Equals(other[i]))
                 {
                     return false;
                 }

@@ -13,11 +13,13 @@ public class Bullet : MonoBehaviour
 
     private void OnEnable()
     {
-        Invoke("DestroyBullet", 1);
+        Invoke("DestroyBullet", 5);
     }
 
     void DestroyBullet()
     {
         PoolManager.Instance.PushGameobject(gameObject);
     }
+
+
 }

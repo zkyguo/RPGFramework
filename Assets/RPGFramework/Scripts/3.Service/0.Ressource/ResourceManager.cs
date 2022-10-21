@@ -139,7 +139,7 @@ public class ResourceManager : BaseManager<ResourceManager>
     /// <param name="path"></param>
     /// <param name="parent"></param>
     /// <returns></returns>
-    public T Load<T>(String path, Transform parent) where T : Component
+    public T Load<T>(String path, Transform parent = null) where T : Component
     {
         if(CheckCacheDic(typeof(T)))
         {

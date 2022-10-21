@@ -168,19 +168,19 @@ public class FrameworkEventListener : MonoBehaviour, IMouseEvent
     /// <param name="action"></param>
     /// <param name="checkArgs"></param>
     /// <param name="args"></param>
-    public void AddListener<T>(FrameworkEventType eventType, Action<T, object[]> action, bool checkArgs =false, params object[] args)
+    public void AddListener<T>(FrameworkEventType eventType, Action<T, object[]> action, params object[] args)
     {
         //if event exists in pool, get it
         if(eventInfoDic.ContainsKey(eventType))
         {
             var eventInfos = eventInfoDic[eventType] as FrameworkEventListenerInfos<T>;
-            eventInfos.AddListener(action, checkArgs, args);
+            eventInfos.AddListener(action,args);
         }
         //if not add it in pool, infos and Dic
         else
         {
             FrameworkEventListenerInfos<T> infos = ResourceManager.Instance.Load<FrameworkEventListenerInfos<T>>();
-            infos.AddListener(action, checkArgs, args);
+            infos.AddListener(action, args);
             eventInfoDic.Add(eventType, infos);
         }
 
@@ -207,11 +207,11 @@ public class FrameworkEventListener : MonoBehaviour, IMouseEvent
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="eventType"></param>
-    public void RemoveAllListener<T>(FrameworkEventType eventType)
+    public void RemoveAllListener(FrameworkEventType eventType)
     {
         if (eventInfoDic.ContainsKey(eventType))
         {
-            (eventInfoDic[eventType] as FrameworkEventListenerInfos<T>)?.RemoveAll();
+            eventInfoDic[eventType]?.RemoveAll();
         }
     }
 
