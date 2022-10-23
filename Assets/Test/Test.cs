@@ -14,7 +14,7 @@ public class Test : MonoBehaviour
         bullet.OnClick(Click, "String123", 123, 321);
         bullet.OnClick(Click, "String321", 123, 321);
         bullet.OnMouseEnter(Enter);
-        bullet.RemoveAllListener();
+        bullet.RemoveClick(Click);
 
     }
 

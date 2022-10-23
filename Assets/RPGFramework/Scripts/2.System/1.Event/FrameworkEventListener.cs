@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -49,7 +50,6 @@ public class FrameworkEventListener : MonoBehaviour, IMouseEvent
     /// One time event data
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    [Pool]
     private class FrameworkEventListenerInfo<T>
     {
         //T : Event class( Pointer, Collision, etc)
@@ -62,6 +62,13 @@ public class FrameworkEventListener : MonoBehaviour, IMouseEvent
             this.args = args;
         }
 
+        public void Destory()
+        {
+            this.action = null;
+            this.args = null;
+            this.ObjectPushPool();
+        }
+
         public void TriggerEvent(T eventData)
         {
             action?.Invoke(eventData, args);
@@ -72,7 +79,6 @@ public class FrameworkEventListener : MonoBehaviour, IMouseEvent
     /// Data which contains many FrameworkEventListenerInfo
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    [Pool]
     private class FrameworkEventListenerInfos<T> : IFrameworkEventListenerInfos
     {
         //All event
@@ -85,7 +91,7 @@ public class FrameworkEventListener : MonoBehaviour, IMouseEvent
         /// <param name="args"></param>
         public void AddListener(Action<T, object[]> action, params object[] args)
         {
-            FrameworkEventListenerInfo<T> info = ResourceManager.Instance.Load<FrameworkEventListenerInfo<T>>();
+            FrameworkEventListenerInfo<T> info = PoolManager.Instance.GetObject<FrameworkEventListenerInfo<T>>();
             info.Init(action, args);
             eventList.Add(info);
         }
@@ -108,14 +114,14 @@ public class FrameworkEventListener : MonoBehaviour, IMouseEvent
                     {
                         if (args.ArrayEquals(eventList[i].args))
                         {
-                            eventList[i].action.ObjectPushPool();
+                            eventList[i].Destory();
                             eventList.RemoveAt(i);
                             return;
                         }
                     }
                     else
                     {
-                        eventList[i].action.ObjectPushPool();
+                        eventList[i].Destory();
                         eventList.RemoveAt(i);
                         return;
                     }
@@ -134,6 +140,7 @@ public class FrameworkEventListener : MonoBehaviour, IMouseEvent
                 eventList[i].ObjectPushPool();
             }
             eventList.Clear();
+            this.ObjectPushPool();
         }
 
         /// <summary>
@@ -179,7 +186,7 @@ public class FrameworkEventListener : MonoBehaviour, IMouseEvent
         //if not add it in pool, infos and Dic
         else
         {
-            FrameworkEventListenerInfos<T> infos = ResourceManager.Instance.Load<FrameworkEventListenerInfos<T>>();
+            FrameworkEventListenerInfos<T> infos = PoolManager.Instance.GetObject<FrameworkEventListenerInfos<T>>();
             infos.AddListener(action, args);
             eventInfoDic.Add(eventType, infos);
         }
@@ -212,6 +219,7 @@ public class FrameworkEventListener : MonoBehaviour, IMouseEvent
         if (eventInfoDic.ContainsKey(eventType))
         {
             eventInfoDic[eventType]?.RemoveAll();
+            eventInfoDic.Remove(eventType);
         }
     }
 
