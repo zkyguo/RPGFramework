@@ -9,30 +9,30 @@ public class Test : MonoBehaviour
 {
     private void Start()
     {
-        Bullet bullet = ResourceManager.Instance.Load<Bullet>("Cube");
-        bullet.OnClick(Click,"String",111,110);
-        bullet.OnClick(Click, "String123", 123, 321);
-        bullet.OnClick(Click, "String321", 123, 321);
-        bullet.OnMouseEnter(Enter);
-        bullet.RemoveClick(Click);
-
+        EventManager.AddEventListener("Test", Call);
+        EventManager.AddEventListener("Test", Appeler);
     }
 
-    private void Call(Bullet obj)
+    private void Update()
     {
-        Debug.Log("Cube Call");
+        if(Input.GetKeyDown(KeyCode.A))
+        {
+            EventManager.EventTrigger("Test");
+        }
+        if(Input.GetKeyUp(KeyCode.B))
+        {
+            
+        }
     }
 
-    void Click(PointerEventData data ,params object[] args)
+    private void Call()
     {
-        Debug.Log("Click on :" + data.position);
-        Debug.Log(args[0]);
-        Debug.Log(args[1]);
-        Debug.Log(args[2]);
+        Debug.Log("Test");
     }
 
-    void Enter(PointerEventData data ,params object[] args)
+    private void Appeler()
     {
-        Debug.Log("Mouse Enter");
+        Debug.Log("Test appeler");
     }
+
 }

@@ -13,7 +13,9 @@ public static class EventManager
     /// Event Info interface
     /// </summary>
     private interface IEventInfo
-    { };
+    {
+        void Destroy();
+    };
 
     /// <summary>
     /// Event data for no type
@@ -23,8 +25,14 @@ public static class EventManager
         public Action action;
         public void Init(Action action)
         {
-            this.action += action;
+            this.action = action;
         }
+
+        public void Destroy()
+        { 
+            this.action = null;
+            this.ObjectPushPool();
+        } 
     }
 
     /// <summary>
@@ -33,9 +41,16 @@ public static class EventManager
     private class EventInfo<T> : IEventInfo
     {
         public Action<T> action;
+
+        public void Destroy()
+        {
+            this.action = null;
+            this.ObjectPushPool();
+        }
+
         public void Init(Action<T> action)
         {
-            this.action += action;
+            this.action = action;
         }
     }
 
@@ -45,9 +60,16 @@ public static class EventManager
     private class EventInfo<T, K> : IEventInfo
     {
         public Action<T, K> action;
+
+        public void Destroy()
+        {
+            this.action = null;
+            this.ObjectPushPool();
+        }
+
         public void Init(Action<T, K> action)
         {
-            this.action += action;
+            this.action = action;
         }
     }
 
@@ -57,9 +79,16 @@ public static class EventManager
     private class EventInfo<T, K, L> : IEventInfo
     {
         public Action<T, K, L> action;
+
+        public void Destroy()
+        {
+            this.action = null;
+            this.ObjectPushPool();
+        }
+
         public void Init(Action<T, K, L> action)
         {
-            this.action += action;
+            this.action = action;
         }
     }
 
@@ -261,10 +290,10 @@ public static class EventManager
         if (eventInfoDic.ContainsKey(eventName))
         {
             //Put it in Object pool, maybe reuse
-            eventInfoDic[eventName].ObjectPushPool();
-            //Remove from Dic
+            eventInfoDic[eventName].Destroy();
             eventInfoDic.Remove(eventName);
         }
+       
     }
 
     /// <summary>
@@ -274,8 +303,9 @@ public static class EventManager
     {
         foreach (var eventName in eventInfoDic.Keys)
         {
-             RemoveEventListener(eventName);
+            eventInfoDic[eventName].Destroy();
         }
+        eventInfoDic.Clear();
     }
 
     #endregion
