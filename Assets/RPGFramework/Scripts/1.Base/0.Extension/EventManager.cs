@@ -293,7 +293,7 @@ public static class EventManager
             eventInfoDic[eventName].Destroy();
             eventInfoDic.Remove(eventName);
         }
-       
+         
     }
 
     /// <summary>
