@@ -16,21 +16,14 @@ public class Test : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.A))
         {
-            AudioManager.Instance.PlayBackgroundAudio("Menu");
+            AudioManager.Instance.PlayEffectAudio("cannon_01", Vector3.zero, 1, true, Call, 1);
         }
-        if(Input.GetKeyUp(KeyCode.B))
-        {
-            AudioManager.Instance.IsPause = true;
-        }
-        if (Input.GetKeyUp(KeyCode.C))
-        {
-            AudioManager.Instance.IsPause = false;
-        }
+    
     }
 
     private void Call()
     {
-        Debug.Log("Test");
+        Debug.Log("Audio finished");
     }
 
     private void Appeler()

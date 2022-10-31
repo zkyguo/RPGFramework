@@ -280,9 +280,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BackgroundAudioSource: {fileID: 20790866}
+  AudioPlayer: {fileID: 7935607649416605109, guid: 6f339f0c6f154bb498f5e78343669817, type: 3}
   _globalVolume: 0.5
   _backgroundVolume: 1
-  _effetVolume: 0
+  _effetVolume: 1
   _isMuted: 0
   _isLoop: 0
   _isPause: 0
