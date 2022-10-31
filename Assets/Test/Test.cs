@@ -9,19 +9,22 @@ public class Test : MonoBehaviour
 {
     private void Start()
     {
-        EventManager.AddEventListener("Test", Call);
-        EventManager.AddEventListener("Test", Appeler);
+       
     }
 
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.A))
         {
-            EventManager.EventTrigger("Test");
+            AudioManager.Instance.PlayBackgroundAudio("Menu");
         }
         if(Input.GetKeyUp(KeyCode.B))
         {
-            
+            AudioManager.Instance.IsPause = true;
+        }
+        if (Input.GetKeyUp(KeyCode.C))
+        {
+            AudioManager.Instance.IsPause = false;
         }
     }
 
