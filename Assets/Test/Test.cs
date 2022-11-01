@@ -5,12 +5,25 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+[Serializable]
+public class SaveTest
+{
+    public int name;
+}
+
 public class Test : MonoBehaviour
 {
     private void Start()
     {
-       
-    }
+        SaveTest st = new SaveTest();
+        st.name = 123565;
+        SaveManager.SaveObject(st, "UserInfo");
+        SaveManager.SaveObject(st, "UserInfo", 3);
+
+        var loading = SaveManager.LoadObject<SaveTest>("UserInfo", 3);
+
+        Debug.Log(loading.name);
+    } 
 
     private void Update()
     {
