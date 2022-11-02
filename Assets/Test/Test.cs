@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 [Serializable]
 public class SaveTest
 {
-    public int name;
+    public int name = 11111;
 }
 
 public class Test : MonoBehaviour
@@ -16,9 +16,14 @@ public class Test : MonoBehaviour
     private void Start()
     {
 
-        var loading = SaveManager.LoadObject<SaveTest>("UserInfo", 3);
+        SaveItem svi = SaveManager.CreateSaveItem();
+        SaveManager.SaveObject(new SaveTest(), svi);
 
-        Debug.Log(loading.name);
+        Debug.Log(SaveManager.LoadObject<SaveTest>(svi.SaveID).name);
+
+        SaveManager.DeleteSaveItem(svi);
+
+        Debug.Log(SaveManager.LoadObject<SaveTest>(svi.SaveID).name); 
     } 
 
     private void Update()

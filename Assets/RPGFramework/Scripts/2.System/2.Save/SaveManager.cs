@@ -74,6 +74,9 @@ public class SaveManager : BaseManager<SaveManager>
         {
             Directory.CreateDirectory(settingDirPath);
         }
+
+        //TODO : Get saveManagerData 
+        
     }
 
     #region Save Data
@@ -131,6 +134,7 @@ public class SaveManager : BaseManager<SaveManager>
             Directory.Delete(itemDir, true);
         }
         saveManagerData.saveItemList.Remove(saveItem);
+        RemoveCache(saveItem.SaveID);
     }
 
     #region Save Object(Serialization)
@@ -215,6 +219,7 @@ public class SaveManager : BaseManager<SaveManager>
         {
             //save dir path
             string dirPath = GetSavePath(saveID);
+            if (dirPath == null) return null;
             //data file in save dir
             string savePath = dirPath + "/" + saveFileName;
             cache =  LoadFile<T>(savePath);
@@ -371,6 +376,15 @@ public class SaveManager : BaseManager<SaveManager>
             
         }
         return null;
+    }
+
+    /// <summary>
+    /// Remove cache
+    /// </summary>
+    /// <param name="saveID"></param>
+    private static void RemoveCache(int saveID)
+    { 
+        saveCacheDic.Remove(saveID);
     }
     #endregion
 
