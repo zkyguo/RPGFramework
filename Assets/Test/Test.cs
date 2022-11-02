@@ -15,10 +15,6 @@ public class Test : MonoBehaviour
 {
     private void Start()
     {
-        SaveTest st = new SaveTest();
-        st.name = 123565;
-        SaveManager.SaveObject(st, "UserInfo");
-        SaveManager.SaveObject(st, "UserInfo", 3);
 
         var loading = SaveManager.LoadObject<SaveTest>("UserInfo", 3);
 
