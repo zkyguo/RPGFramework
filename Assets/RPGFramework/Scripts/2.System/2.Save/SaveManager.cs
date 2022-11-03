@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
 /// <summary>
 /// Save data
 /// </summary>
+[Serializable]
 public class SaveItem
 {
     public int SaveID { get; private set; }
@@ -26,10 +28,11 @@ public class SaveItem
 
 public class SaveManager : BaseManager<SaveManager>
 {
- 
+
     /// <summary>
     /// Manager config data
     /// </summary>
+    [Serializable]
     private class SaveManagerData
     {
         /// <summary>
@@ -45,7 +48,7 @@ public class SaveManager : BaseManager<SaveManager>
 
     }
 
-    private static SaveManagerData saveManagerData = new SaveManagerData();
+    private static SaveManagerData saveManagerData;
 
     //Save data file name
     private const string savingDirName = "SaveData";
@@ -75,12 +78,121 @@ public class SaveManager : BaseManager<SaveManager>
             Directory.CreateDirectory(settingDirPath);
         }
 
-        //TODO : Get saveManagerData 
-        
+        //Init saveManagerData 
+        GetSaveManagerData();
+       
     }
 
+    #region SaveManager Config
+
+    /// <summary>
+    /// Initialize saveManagerData
+    /// </summary>
+    /// <returns></returns>
+    private static void GetSaveManagerData()
+    {
+        //Check if saveManagerData exists in save dir
+         saveManagerData = LoadFile<SaveManagerData>(saveDirPath + "/SaveManagerData");   
+
+        if(saveManagerData == null)
+        {
+            //if null, it means that our game doesnt have save Data. We have to create one
+            saveManagerData = new SaveManagerData();
+            UpdateSaveManagerData();
+        }
+
+    }
+
+    /// <summary>
+    /// Export SaveManagerData to save dir
+    /// </summary>
+    public static void UpdateSaveManagerData()
+    {
+        SaveFile(saveManagerData, saveDirPath + "/SaveManagerData");
+
+    }
+
+    /// <summary>
+    /// Get all saveItem 
+    /// </summary>
+    /// <returns></returns>
+    public static List<SaveItem> GetAllSaveItemList()
+    {
+        return saveManagerData.saveItemList;
+    }
+
+    /// <summary>
+    /// Sort all items by the newest create save Item
+    /// </summary>
+    /// <returns></returns>
+    public static List<SaveItem> GetAllSaveItemsByCreateTime()
+    {
+        List<SaveItem> list = new List<SaveItem>(saveManagerData.saveItemList.Count); 
+        for (int i = 0; i <  saveManagerData.saveItemList.Count; i++)
+        {
+            list.Add(saveManagerData.saveItemList[saveManagerData.saveItemList.Count - (i+1)]);
+            
+        }
+        return list;
+
+    }
+
+    /// <summary>
+    /// Sort all items by the last update save Item
+    /// </summary>
+    /// <returns></returns>
+    public static List<SaveItem> GetAllSaveItemsByUpdateTime()
+    {
+        List<SaveItem> saveItems = new List<SaveItem>(saveManagerData.saveItemList.Count);
+        for (int i = 0; i < saveManagerData.saveItemList.Count; i++)
+        {
+            saveItems.Add(saveManagerData.saveItemList[i]);
+
+        }
+        OrderByUpdateTimeComparer orderBy = new OrderByUpdateTimeComparer();
+        saveItems.Sort(orderBy);
+        return saveItems;
+    }
+
+    private class OrderByUpdateTimeComparer : IComparer<SaveItem>
+    {
+        public int Compare(SaveItem x, SaveItem y)
+        {
+            if(x.LastSaveTime > y.LastSaveTime)
+            {
+                return -1;
+            }
+            else
+            {
+                return 1;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Get all save item by order
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="orderFunc"></param>
+    /// <param name="isDescending"></param>
+    /// <returns></returns>
+    public static List<SaveItem> GetSaveItems<T>(Func<SaveItem,T> orderFunc, bool isDescending =false)
+    {
+        if(isDescending)
+        {
+            return saveManagerData.saveItemList.OrderByDescending(orderFunc).ToList();
+        }
+        else
+        {
+            return saveManagerData.saveItemList.OrderBy(orderFunc).ToList();
+        }
+       
+    }
+
+    #endregion
+
     #region Save Data
-    
+
     /// <summary>
     /// Get save item by saveID
     /// </summary>
@@ -108,10 +220,10 @@ public class SaveManager : BaseManager<SaveManager>
         SaveItem saveItem = new SaveItem(saveManagerData.currentID,DateTime.Now);
         saveManagerData.saveItemList.Add(saveItem);
         saveManagerData.currentID += 1;
-        //TODO : update saveManagerData to save dir
+        //update saveManagerData to save dir
+        UpdateSaveManagerData();
         return saveItem;
     }
-    #endregion
 
     /// <summary>
     /// Delete a saveItem by save ID
@@ -128,14 +240,17 @@ public class SaveManager : BaseManager<SaveManager>
     /// <param name="saveItem"></param>
     public static void DeleteSaveItem(SaveItem saveItem)
     {
-        string itemDir = GetSavePath(saveItem.SaveID,false);
+        string itemDir = GetSavePath(saveItem.SaveID, false);
         if (itemDir != null)
         {
             Directory.Delete(itemDir, true);
         }
         saveManagerData.saveItemList.Remove(saveItem);
         RemoveCache(saveItem.SaveID);
+        //update saveManagerData to save dir
+        UpdateSaveManagerData();
     }
+    #endregion
 
     #region Save Object(Serialization)
 
@@ -154,7 +269,8 @@ public class SaveManager : BaseManager<SaveManager>
         SaveFile(saveObject, savePath);
         //Update saving time
         GetSaveItem(saveID).UpdateLastSavingTime(DateTime.Now);
-        // TODO ?Update SaveManagerData
+        //update saveManagerData to save dir
+        UpdateSaveManagerData();
 
         //Update Save cache
         SetCache(saveID, saveFileName, saveObject);
@@ -175,7 +291,8 @@ public class SaveManager : BaseManager<SaveManager>
         SaveFile(saveObject, savePath);
         //Update saving time
         saveItem.UpdateLastSavingTime(DateTime.Now);
-        // TODO ?Update SaveManagerData
+        //update saveManagerData to save dir
+        UpdateSaveManagerData();
 
         //Update Save cache
         SetCache(saveItem.SaveID, saveFileName, saveObject);
@@ -279,6 +396,10 @@ public class SaveManager : BaseManager<SaveManager>
     private static string GetSavePath(int saveID, bool createDir =true)
     {
         //Check if save file exists 
+        if(GetSaveItem(saveID) == null)
+        {
+            throw new Exception("saveID : " + saveID + " doesnt exist");
+        }
         string saveDir = saveDirPath + "/" + saveID; 
 
         if(!Directory.Exists(saveDir))
