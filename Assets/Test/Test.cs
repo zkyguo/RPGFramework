@@ -18,27 +18,13 @@ public class Test : MonoBehaviour
 
         /*for (int i = 0; i < 10; i++)
         {
-            SaveItem svi = SaveManager.CreateSaveItem();
+             SaveItem svi = SaveManager.CreateSaveItem();
             SaveManager.SaveObject(new SaveTest() { name = i }, svi);
         }*/
 
-        SaveManager.SaveObject(new SaveTest() { name = 5 }, 8);
-        SaveManager.SaveObject(new SaveTest() { name = 549885 }, 11);
-        SaveManager.SaveObject(new SaveTest() { name = 1231 }, 15);
-        List<SaveItem> list = SaveManager.GetSaveItems<int>(
-            
-            saveItem =>
-            {
-                SaveTest sv = SaveManager.LoadObject<SaveTest>(saveItem);
-                if (sv == null) return 0;
-                return sv.name;
-            }
-            );
-        foreach (var item in list)
-        {
-            Debug.Log(item.SaveID);
-        }
+        SaveManager.SaveSetting(new SaveTest() { name = 111});
 
+        Debug.Log(SaveManager.LoadingSetting<SaveTest>().name);
 
     } 
 

@@ -509,5 +509,49 @@ public class SaveManager : BaseManager<SaveManager>
     }
     #endregion
 
+    #region Game setting Data (global data, Doesnt affect by saving)
+
+    /// <summary>
+    /// Load game setting data from setting dir
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="fileName"></param>
+    /// <returns></returns>
+    public static T LoadingSetting<T>(string fileName) where T : class
+    {
+        return LoadFile<T>(settingDirPath + "/" + fileName);
+    }
+
+    /// <summary>
+    /// Load game setting data by setting name
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="fileName"></param>
+    /// <returns></returns>
+    public static T LoadingSetting<T>() where T : class
+    {
+        return LoadingSetting<T>(typeof(T).Name);
+    }
+
+    /// <summary>
+    /// Save game setting 
+    /// </summary>
+    /// <param name="saveObject"></param>
+    /// <param name="fileName"></param>
+    public static void SaveSetting(object saveObject, string fileName)
+    {
+        SaveFile(saveObject, settingDirPath + "/" + fileName);
+    }
+
+    /// <summary>
+    /// Save game setting 
+    /// </summary>
+    /// <param name="saveObject"></param>
+    /// <param name="fileName"></param>
+    public static void SaveSetting(object saveObject)
+    {
+        SaveSetting(saveObject, saveObject.GetType().Name);
+    }
+    #endregion
 
 }
