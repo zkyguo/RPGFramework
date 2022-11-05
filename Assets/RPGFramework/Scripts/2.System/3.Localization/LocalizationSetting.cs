@@ -33,7 +33,7 @@ public class L_Text : ILanguangeContent
 [Serializable]
 public class L_Image : ILanguangeContent
 {
-    public Image content;
+    public Sprite content;
 }
 
 /// <summary>

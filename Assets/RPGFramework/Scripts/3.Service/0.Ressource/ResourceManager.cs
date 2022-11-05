@@ -11,7 +11,7 @@ public class ResourceManager : BaseManager<ResourceManager>
     public override void Init()
     {
         base.Init(); 
-        CacheDic = GameRoot.Instance.GameSetting.CacheDic;
+        CacheDic = GameRoot.Instance.gameSetting.CacheDic;
         
     }
 

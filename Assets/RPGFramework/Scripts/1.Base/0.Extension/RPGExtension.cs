@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using Unity.Rendering.HybridV2;
+using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.Video;
 
 /// <summary>
 /// Main extensions about RPGFramework
@@ -95,4 +97,52 @@ public static class RPGExtension
     }
 
     #endregion
+
+    #region Localisation
+
+    /// <summary>
+    /// Set localisation text content
+    /// </summary>
+    /// <param name="text"></param>
+    /// <param name="packageName"></param>
+    /// <param name="contentKey"></param>
+    public static void LocalSet(this Text text, string packageName, string contentKey)
+    {
+        text.text = LocalizationManager.Instance.GetContent<L_Text>(packageName, contentKey).content;
+    }
+
+    /// <summary>
+    /// Set localisation audio content
+    /// </summary>
+    /// <param name="text"></param>
+    /// <param name="packageName"></param>
+    /// <param name="contentKey"></param>
+    public static void LocalSet(this AudioSource audio, string packageName, string contentKey)
+    {
+        audio.clip = LocalizationManager.Instance.GetContent<L_Audio>(packageName, contentKey).content;
+    }
+
+    /// <summary>
+    /// Set localisation image content
+    /// </summary>
+    /// <param name="text"></param>
+    /// <param name="packageName"></param>
+    /// <param name="contentKey"></param>
+    public static void LocalSet(this Image image, string packageName, string contentKey)
+    {
+        image.sprite = LocalizationManager.Instance.GetContent<L_Image>(packageName, contentKey).content;
+    }
+
+    /// <summary>
+    /// Set localisation video content
+    /// </summary>
+    /// <param name="text"></param>
+    /// <param name="packageName"></param>
+    /// <param name="contentKey"></param>
+    public static void LocalSet(this VideoPlayer video, string packageName, string contentKey)
+    {
+        video.clip = LocalizationManager.Instance.GetContent<L_Video>(packageName, contentKey).content;
+    }
+    #endregion
+
 }

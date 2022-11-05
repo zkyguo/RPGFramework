@@ -23,19 +23,13 @@ public class GameSetting : ConfigBase
 
     [Button(Name = "Initialize GameSetting", ButtonHeight = 50)]
     [GUIColor(0,1,0)]
-    private void Init()
-    {
-        PoolAttributeOnEditor();
-    }
-
     /// <summary>
     /// Execute while Editor is loading
     /// </summary>
-    [InitializeOnLoadMethod]
-    private static void EditorOnLoad()
+    public void InitPoolAttribute()
     {
-        GameObject.Find("GameRoot")?.GetComponent<GameRoot>().GameSetting.Init();
-      
+
+        PoolAttributeOnEditor();
     }
 
     /// <summary>
