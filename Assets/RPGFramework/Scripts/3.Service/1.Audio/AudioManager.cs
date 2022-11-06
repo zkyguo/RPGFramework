@@ -165,7 +165,7 @@ public class AudioManager : BaseManager<AudioManager>
     /// <param name="volume"></param>
     public void PlayBackgroundAudio(string clipPath, bool loop = true, float volume = -1)
     {
-        AudioClip clip = ResourceManager.Instance.LoadAsset<AudioClip>(clipPath);
+        AudioClip clip = ResourceManager.LoadAsset<AudioClip>(clipPath);
         PlayBackgroundAudio(clip, loop, volume);
     }
 
@@ -248,7 +248,7 @@ public class AudioManager : BaseManager<AudioManager>
     /// <param name="callBackTime">Delay before trigger Callback function </param>
     public void PlayEffectAudio(string clipPath, Vector3 playPosition, float volume = 1, bool is3D = true, UnityAction callBack = null, float callBackTime = 0)
     {
-        AudioClip audioClip = ResourceManager.Instance.LoadAsset<AudioClip>(clipPath);
+        AudioClip audioClip = ResourceManager.LoadAsset<AudioClip>(clipPath);
         if (audioClip != null)
         {
             PlayEffectAudio(audioClip, playPosition, volume, is3D, callBack, callBackTime);
@@ -266,7 +266,7 @@ public class AudioManager : BaseManager<AudioManager>
     /// <param name="callBackTime">Delay before trigger Callback function </param>
     public void PlayEffectAudio(string clipPath, Component parent, float volume = 1, bool is3D = true, UnityAction callBack = null, float callBackTime = 0)
     {
-        AudioClip audioClip = ResourceManager.Instance.LoadAsset<AudioClip>(clipPath);
+        AudioClip audioClip = ResourceManager.LoadAsset<AudioClip>(clipPath);
         if (audioClip != null)
         {
             PlayEffectAudio(audioClip, parent, volume, is3D, callBack, callBackTime);

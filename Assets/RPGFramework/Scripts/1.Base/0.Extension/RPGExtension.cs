@@ -145,4 +145,57 @@ public static class RPGExtension
     }
     #endregion
 
+    #region MonoExtension
+
+    /// <summary>
+    /// Add updateListener to MonoManager
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="action"></param>
+    public static void AddUpdateListener(this object obj, Action action)
+    {
+        MonoManager.Instance.AddUpdateListener(action);
+    }
+
+    /// <summary>
+    /// Remove updateListener of MonoManager
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="action"></param>
+    public static void RemoveUpdateListener(this object obj, Action action)
+    {
+        MonoManager.Instance.RemoveUpdateListener(action);
+    }
+
+    /// <summary>
+    /// Start a routine
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="routine"></param>
+    /// <returns></returns>
+    public static Coroutine CoroutineStart(this object obj, IEnumerator routine)
+    {
+        return MonoManager.Instance.StartCoroutine(routine);
+    }
+
+    /// <summary>
+    /// Stop a routine
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="routine"></param>
+    public static void CoroutineStop(this object obj, Coroutine routine)
+    {
+        MonoManager.Instance.StopCoroutine(routine);
+    }
+
+    /// <summary>
+    /// Stop all coroutine
+    /// </summary>
+    /// <param name="obj"></param>
+    public static void AllCoroutineStop(this object obj) 
+    {
+        MonoManager.Instance.StopAllCoroutines();
+    }
+    #endregion
+
 }

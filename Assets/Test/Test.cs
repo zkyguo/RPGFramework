@@ -5,46 +5,48 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-[Serializable]
-public class SaveTest
+public class TestModel
 {
-    public int name;
+    public TestModel()
+    {
+        this.AddUpdateListener(OnUpdate);
+   
+
+    }
+
+    private void OnUpdate()
+    {
+        Debug.Log("OnUpdate");
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+
+
+        }
+    }
 }
 
 public class Test : MonoBehaviour
 {
+  
     private void Start()
     {
+        ResourceManager.LoadGameObjectAsync<Bullet>("Cube");
+        
 
-        /*for (int i = 0; i < 10; i++)
-        {
-             SaveItem svi = SaveManager.CreateSaveItem();
-            SaveManager.SaveObject(new SaveTest() { name = i }, svi);
-        }*/
+    }
 
-        SaveManager.SaveSetting(new SaveTest() { name = 111});
+    void CallBack(Bullet bullet) 
+    {
+        Debug.Log(bullet.transform.name);
+    }
 
-        Debug.Log(SaveManager.LoadingSetting<SaveTest>().name);
-
-    } 
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.A))
-        {
-            AudioManager.Instance.PlayEffectAudio("cannon_01", Vector3.zero, 1, true, Call, 1);
-        }
+        
+        
     
     }
 
-    private void Call()
-    {
-        Debug.Log("Audio finished");
-    }
-
-    private void Appeler()
-    {
-        Debug.Log("Test appeler");
-    }
 
 }

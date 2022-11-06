@@ -4,15 +4,13 @@ using System.Collections.Generic;
 using UnityEditor.PackageManager;
 using UnityEngine;
 
-public class ResourceManager : BaseManager<ResourceManager>
+public static class ResourceManager 
 {
-    private Dictionary<Type, bool> CacheDic;
+    private static Dictionary<Type, bool> CacheDic;
 
-    public override void Init()
+    static ResourceManager()
     {
-        base.Init(); 
         CacheDic = GameRoot.Instance.gameSetting.CacheDic;
-        
     }
 
     /// <summary>
@@ -21,7 +19,7 @@ public class ResourceManager : BaseManager<ResourceManager>
     /// <param name="path"></param>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
-    public GameObject GetPrefab(string path)
+    public static GameObject GetPrefab(string path)
     {
         GameObject prefab = Resources.Load<GameObject>(path);
         if(prefab == null)
@@ -38,7 +36,7 @@ public class ResourceManager : BaseManager<ResourceManager>
     /// </summary>
     /// <param name="type"></param>
     /// <returns></returns>
-    private bool CheckCacheDic(Type type)
+    private static bool CheckCacheDic(Type type)
     {
         return CacheDic.ContainsKey(type);  
     }
@@ -49,7 +47,7 @@ public class ResourceManager : BaseManager<ResourceManager>
     /// <typeparam name="T"></typeparam>
     /// <param name="path"></param>
     /// <returns></returns>
-    public T LoadAsset<T>(string path) where T : UnityEngine.Object
+    public static T LoadAsset<T>(string path) where T : UnityEngine.Object
     {
         return Resources.Load<T>(path);
     }
@@ -61,7 +59,7 @@ public class ResourceManager : BaseManager<ResourceManager>
     /// <param name="path"></param>
     /// <param name="callBack"></param>
     /// <param name="parent"></param>
-    public void LoadGameObjectAsync<T>(string path, Action<T> callBack = null, Transform parent = null) where T : UnityEngine.Object
+    public static void LoadGameObjectAsync<T>(string path, Action<T> callBack = null, Transform parent = null) where T : UnityEngine.Object
     {
         
         if (CheckCacheDic(typeof(T)))
@@ -73,7 +71,8 @@ public class ResourceManager : BaseManager<ResourceManager>
                 return;
             }
         }
-        StartCoroutine(ExecuteLoadGameObjectAsync<T>(path, callBack, parent));
+        MonoManager.Instance.StartCoroutine(ExecuteLoadGameObjectAsync<T>(path, callBack, parent));
+        
     }
 
     /// <summary>
@@ -84,7 +83,7 @@ public class ResourceManager : BaseManager<ResourceManager>
     /// <param name="callBack"></param>
     /// <param name="parent"></param>
     /// <returns></returns>
-    IEnumerator ExecuteLoadGameObjectAsync<T>(string path, Action<T> callBack = null, Transform parent = null) where T : UnityEngine.Object
+    static IEnumerator ExecuteLoadGameObjectAsync<T>(string path, Action<T> callBack = null, Transform parent = null) where T : UnityEngine.Object
     {
         ResourceRequest request = Resources.LoadAsync<GameObject>(path);
         yield return request;
@@ -98,9 +97,9 @@ public class ResourceManager : BaseManager<ResourceManager>
     /// <typeparam name="T"></typeparam>
     /// <param name="path"></param>
     /// <param name="callBack"></param>
-    public void LoadAssetAsync<T>(string path, Action<T> callBack) where T : UnityEngine.Object
+    public static void LoadAssetAsync<T>(string path, Action<T> callBack) where T : UnityEngine.Object
     {
-        StartCoroutine(ExecuteLoadAsset<T>(path, callBack));
+        MonoManager.Instance.StartCoroutine(ExecuteLoadAsset<T>(path, callBack));
     }
 
     /// <summary>
@@ -110,7 +109,7 @@ public class ResourceManager : BaseManager<ResourceManager>
     /// <param name="path"></param>
     /// <param name="callBack"></param>
     /// <returns></returns>
-    IEnumerator ExecuteLoadAsset<T>(string path, Action<T> callBack) where T : UnityEngine.Object
+    static IEnumerator ExecuteLoadAsset<T>(string path, Action<T> callBack) where T : UnityEngine.Object
     {
         ResourceRequest request = Resources.LoadAsync<T>(path);
         yield return request;
@@ -122,7 +121,7 @@ public class ResourceManager : BaseManager<ResourceManager>
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public T Load<T>() where T : class, new()
+    public static T Load<T>() where T : class, new()
     {
         if(CheckCacheDic(typeof(T)))
         {
@@ -139,7 +138,7 @@ public class ResourceManager : BaseManager<ResourceManager>
     /// <param name="path"></param>
     /// <param name="parent"></param>
     /// <returns></returns>
-    public T Load<T>(String path, Transform parent = null) where T : Component
+    public static T Load<T>(String path, Transform parent = null) where T : Component
     {
         if(CheckCacheDic(typeof(T)))
         {
@@ -155,7 +154,7 @@ public class ResourceManager : BaseManager<ResourceManager>
     /// <param name="path"></param>
     /// <param name="parent"></param>
     /// <returns></returns>
-    public GameObject InstantiatePrefab(string path, Transform parent = null)
+    public static GameObject InstantiatePrefab(string path, Transform parent = null)
     {
         return InstantiatePrefab(GetPrefab(path), parent);
     }
@@ -166,7 +165,7 @@ public class ResourceManager : BaseManager<ResourceManager>
     /// <param name="prefab"></param>
     /// <param name="parent"></param>
     /// <returns></returns>
-    public GameObject InstantiatePrefab(GameObject prefab, Transform parent = null)
+    public static GameObject InstantiatePrefab(GameObject prefab, Transform parent = null)
     {
         GameObject obj = GameObject.Instantiate<GameObject>(prefab, parent);
         obj.name = prefab.name;
