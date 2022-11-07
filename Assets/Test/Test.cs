@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class TestModel
 {
@@ -30,14 +32,20 @@ public class Test : MonoBehaviour
   
     private void Start()
     {
-        ResourceManager.LoadGameObjectAsync<Bullet>("Cube");
+        EventManager.AddEventListener<float>("LoadingSceneProgress", LoadScene);
+        MySenceManager.LoadScene("SceneTest", CallBack);
         
 
     }
 
-    void CallBack(Bullet bullet) 
+    private void LoadScene(float obj)
     {
-        Debug.Log(bullet.transform.name);
+        Debug.Log("progress : " + obj);
+    }
+
+    void CallBack() 
+    {
+        Debug.Log("Scene Loaded");
     }
 
 
