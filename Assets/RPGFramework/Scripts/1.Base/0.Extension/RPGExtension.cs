@@ -168,6 +168,46 @@ public static class RPGExtension
     }
 
     /// <summary>
+    /// Add LateUpdate Listener to MonoManager
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="action"></param>
+    public static void AddLateUpdateListener(this object obj, Action action)
+    {
+        MonoManager.Instance.AddLateUpdateListener(action);
+    }
+
+    /// <summary>
+    /// Remove LateUpdate Listener of MonoManager
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="action"></param>
+    public static void RemoveLateUpdateListener(this object obj, Action action)
+    {
+        MonoManager.Instance.RemoveLateUpdateListener(action);
+    }
+
+    /// <summary>
+    /// Add FixedUpdate Listener to MonoManager
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="action"></param>
+    public static void AddFixedUpdateListener(this object obj, Action action)
+    {
+        MonoManager.Instance.AddFixedUpdateListener(action);
+    }
+
+    /// <summary>
+    /// Remove FixedUpdate Listener of MonoManager
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="action"></param>
+    public static void RemoveFixedLateUpdateListener(this object obj, Action action)
+    {
+        MonoManager.Instance.RemoveFixedLateUpdateListener(action);
+    }
+
+    /// <summary>
     /// Start a routine
     /// </summary>
     /// <param name="obj"></param>

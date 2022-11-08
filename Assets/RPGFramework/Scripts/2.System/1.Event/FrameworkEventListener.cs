@@ -156,14 +156,32 @@ public class FrameworkEventListener : MonoBehaviour, IMouseEvent
         }
     }
 
-    #endregion
-
-    interface IFrameworkEventListenerInfos {
+    interface IFrameworkEventListenerInfos
+    {
 
         void RemoveAll();
     }
 
-    private Dictionary<FrameworkEventType, IFrameworkEventListenerInfos> eventInfoDic = new Dictionary<FrameworkEventType, IFrameworkEventListenerInfos>();
+    /// <summary>
+    /// Enum comparator
+    /// </summary>
+    private class FrameworkEventTypeEnumComparer : BaseSingleton<FrameworkEventTypeEnumComparer>, IEqualityComparer<FrameworkEventType>
+    {
+        public bool Equals(FrameworkEventType x, FrameworkEventType y)
+        {
+            return x == y;
+        }
+
+        public int GetHashCode(FrameworkEventType obj)
+        {
+            return (int)obj;
+        }
+    }
+    #endregion
+
+
+
+    private Dictionary<FrameworkEventType, IFrameworkEventListenerInfos> eventInfoDic = new Dictionary<FrameworkEventType, IFrameworkEventListenerInfos>(FrameworkEventTypeEnumComparer.Instance);
 
     #region Externel acces
 

@@ -32,8 +32,6 @@ public class Test : MonoBehaviour
   
     private void Start()
     {
-        EventManager.AddEventListener<float>("LoadingSceneProgress", LoadScene);
-        MySenceManager.LoadScene("SceneTest", CallBack);
         
 
     }
@@ -48,10 +46,17 @@ public class Test : MonoBehaviour
         Debug.Log("Scene Loaded");
     }
 
+    void Action()
+    {
+        Debug.Log("Update");
+    }
 
     private void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+           
+        }
         
     
     }
