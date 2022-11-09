@@ -1,64 +1,110 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using Unity.Mathematics;
+using System.Runtime.CompilerServices;
+using UnityEditorInternal;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class TestModel
+public enum TestType
 {
-    public TestModel()
-    {
-        this.AddUpdateListener(OnUpdate);
-   
+    A, B, C
+}
 
+public class TestStateBase : StateBase
+{
+    protected Text text;
+    public override void Init(IStateMachineOwner owner, int stateType, StateMachine stateMachine)
+    {
+        base.Init(owner, stateType, stateMachine);
+        text = (owner as Test).text;
     }
 
-    private void OnUpdate()
+    public override void UnInit()
     {
-        Debug.Log("OnUpdate");
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-
-
-        }
+        base.UnInit();
+        text = null;
+        Debug.Log("Test destroy");
     }
 }
 
-public class Test : MonoBehaviour
+[Pool]
+public class TestA : TestStateBase
 {
+    public override void Init(IStateMachineOwner owner, int stateType, StateMachine stateMachine)
+    {
+        base.Init(owner, stateType, stateMachine);
+        Debug.Log("Init State A");
+    }
+
+    public override void Enter()
+    {
+        Debug.Log("Enter State A");
+        text.text = "A";
+    }
+
+    public override void Update()
+    {
+        Debug.Log("Update State A");
+    }
+
+    public override void Exit()
+    {
+        Debug.Log("Exit State A");
+    }
+
   
+}
+
+[Pool]
+public class TestB : TestStateBase
+{
+    public override void Init(IStateMachineOwner owner, int stateType, StateMachine stateMachine)
+    {
+        base.Init(owner, stateType, stateMachine);
+        Debug.Log("Init State B");
+    }
+
+    public override void Enter()
+    {
+        Debug.Log("Enter State B");
+        text.text = "B";
+    }
+
+    public override void Update()
+    {
+        Debug.Log("Update State B");
+    }
+
+    public override void Exit()
+    {
+        Debug.Log("Exit State B");
+    }
+}
+
+public class Test : MonoBehaviour, IStateMachineOwner
+{
+    public Text text { get; private set;}
+    private StateMachine stateMachine;
+
     private void Start()
     {
-        
+        text = GetComponent<Text>();
+        stateMachine = ResourceManager.Load<StateMachine>();
+        stateMachine.Init(this);
+        stateMachine.SwitchState<TestA>((int)TestType.A);
 
-    }
-
-    private void LoadScene(float obj)
-    {
-        Debug.Log("progress : " + obj);
-    }
-
-    void CallBack() 
-    {
-        Debug.Log("Scene Loaded");
-    }
-
-    void Action()
-    {
-        Debug.Log("Update");
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-           
+            stateMachine.SwitchState<TestA>((int)TestType.A);
         }
-        
-    
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            stateMachine.Destroy();
+            stateMachine = null;
+        }
+
     }
 
 

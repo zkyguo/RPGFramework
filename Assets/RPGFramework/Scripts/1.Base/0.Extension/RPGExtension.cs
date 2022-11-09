@@ -202,9 +202,9 @@ public static class RPGExtension
     /// </summary>
     /// <param name="obj"></param>
     /// <param name="action"></param>
-    public static void RemoveFixedLateUpdateListener(this object obj, Action action)
+    public static void RemoveFixedUpdateListener(this object obj, Action action)
     {
-        MonoManager.Instance.RemoveFixedLateUpdateListener(action);
+        MonoManager.Instance.RemoveFixedUpdateListener(action);
     }
 
     /// <summary>

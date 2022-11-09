@@ -60,7 +60,7 @@ public class MonoManager : BaseManager<MonoManager>
     /// Remove FixedUpdate Listener of MonoManager
     /// </summary>
     /// <param name="action"></param>
-    public void RemoveFixedLateUpdateListener(Action action)
+    public void RemoveFixedUpdateListener(Action action)
     {
         FixedUpdateEvent -= action;
     }
