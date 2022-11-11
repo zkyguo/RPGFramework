@@ -79,7 +79,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Window 1
+  m_Text: Window 2
 --- !u!114 &5724189734449613419
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -303,9 +303,9 @@ GameObject:
   - component: {fileID: 3942005095347541527}
   - component: {fileID: 73035372227583923}
   - component: {fileID: 2956843027540243145}
-  - component: {fileID: 3196666026884029183}
+  - component: {fileID: 2303172269858660950}
   m_Layer: 5
-  m_Name: Test_Window
+  m_Name: Test_Window2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -370,7 +370,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3196666026884029183
+--- !u!114 &2303172269858660950
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -379,6 +379,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 4072234154118466671}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5161ffc41f8df314da05876f58311b46, type: 3}
+  m_Script: {fileID: 11500000, guid: 5b1f22086a35c9b47870ed5f3588e941, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

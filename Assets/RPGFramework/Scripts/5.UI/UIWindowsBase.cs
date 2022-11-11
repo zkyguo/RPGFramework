@@ -47,6 +47,7 @@ public class UIWindowsBase : MonoBehaviour
     /// </summary>
     public virtual void Close() 
     {
+        UIManager.Instance.Close(type);
         RemoveEventListener();
     }
 
