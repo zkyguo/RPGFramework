@@ -47,6 +47,22 @@ public class UIManager : BaseManager<UIManager>
     /// </summary>
     public Dictionary<Type, UIElement> UIElementsDic { get { return GameRoot.Instance.gameSetting.UIElementCacheDic; } }
 
+    #region UI Tips
+    /// <summary>
+    /// UItips
+    /// </summary>
+    [SerializeField]
+    private UITips uITips;
+
+    public void AddTips(string info)
+    {
+        uITips.AddTips(info);
+    }
+
+    
+
+    #endregion
+
     /// <summary>
     /// Show window
     /// </summary>
@@ -121,6 +137,7 @@ public class UIManager : BaseManager<UIManager>
             //if UI object will be used again
             if(info.isCache)
             {
+                info.ObjInstance.transform.SetAsFirstSibling();
                 //hide it 
                 info.ObjInstance.gameObject.SetActive(false);
             }
@@ -128,7 +145,7 @@ public class UIManager : BaseManager<UIManager>
             else
             {
                 //release it
-                Destroy(info.ObjInstance);
+                Destroy(info.ObjInstance.gameObject);
                 info.ObjInstance = null;
             }
             UILayers[info.layerNum].OnClose();

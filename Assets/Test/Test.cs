@@ -17,11 +17,11 @@ public class Test : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            UIManager.Instance.Show<TestWindow>();
+            UIManager.Instance.AddTips("This is A");
         }
         if (Input.GetKeyDown(KeyCode.B))
         {
-            UIManager.Instance.Show<TestWindow2>();
+            UIManager.Instance.AddTips("This is B");
         }
         if (Input.GetKeyDown(KeyCode.C))
         {
