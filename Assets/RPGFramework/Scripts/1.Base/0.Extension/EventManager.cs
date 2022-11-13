@@ -228,7 +228,7 @@ public static class EventManager
     #region Cancel event listening action
 
     /// <summary>
-    /// Cancel no generic event listener
+    /// Cancel((Unregister)) no generic event listener
     /// </summary>
     /// <param name="eventName"></param>
     public static void CancelEventListener(string eventName, Action action)
@@ -240,7 +240,7 @@ public static class EventManager
     }
 
     /// <summary>
-    /// Cancel T event listener
+    /// Cancel(Unregister) T event listener
     /// </summary>
     /// <param name="eventName"></param>
     public static void CancelEventListener<T>(string eventName, Action<T> action)
@@ -252,7 +252,7 @@ public static class EventManager
     }
 
     /// <summary>
-    /// Cancel T, K event listener
+    /// Cancel((Unregister)) T, K event listener
     /// </summary>
     /// <param name="eventName"></param>
     public static void CancelEventListener<T, K>(string eventName, Action<T, K> action)
@@ -265,7 +265,7 @@ public static class EventManager
 
 
     /// <summary>
-    /// Cancel T, K, L event listener
+    /// Cancel(Unregister) T, K, L event listener
     /// </summary>
     /// <param name="eventName"></param>
     public static void CancelEventListener<T, K, L>(string eventName, Action<T, K, L> action)
