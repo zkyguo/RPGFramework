@@ -1,7 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEditor;
 using UnityEngine;
+
+namespace Framework { 
 
 public class GameRoot : BaseSingletonMono<GameRoot>
 {
@@ -35,6 +36,11 @@ public class GameRoot : BaseSingletonMono<GameRoot>
     [InitializeOnLoadMethod]
     public static void InitEditor()
     {
+        //Check if editor is playing(in game) or will play soon
+        if (EditorApplication.isPlayingOrWillChangePlaymode)
+        {
+            return;
+        }
         if(Instance == null && GameObject.Find("GameRoot") != null)
         {
             Instance = GameObject.Find("GameRoot").GetComponent<GameRoot>();
@@ -47,4 +53,6 @@ public class GameRoot : BaseSingletonMono<GameRoot>
     }   
 
 #endif
+}
+
 }

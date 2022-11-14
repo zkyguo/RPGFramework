@@ -6,82 +6,86 @@ using System;
 using UnityEngine.Video;
 using UnityEngine.UI;
 
-/// <summary>
-/// Languages of game
-/// </summary>
-public enum LanguageType
+namespace Framework
 {
-    English = 0, Francais = 1
-}
 
-#region Localisation Language content
-/// <summary>
-/// Interface of content
-/// </summary>
-public interface ILanguangeContent
-{}
+    /// <summary>
+    /// Languages of game
+    /// </summary>
+    public enum LanguageType
+    {
+        English = 0, Francais = 1
+    }
 
-/// <summary>
-/// Text language content
-/// </summary>
-[Serializable]
-public class L_Text : ILanguangeContent
-{
-    public string content;
-}
+    #region Localisation Language content
+    /// <summary>
+    /// Interface of content
+    /// </summary>
+    public interface ILanguangeContent
+    { }
 
-[Serializable]
-public class L_Image : ILanguangeContent
-{
-    public Sprite content;
-}
+    /// <summary>
+    /// Text language content
+    /// </summary>
+    [Serializable]
+    public class L_Text : ILanguangeContent
+    {
+        public string content;
+    }
 
-/// <summary>
-/// Audio localisation content
-/// </summary>
-[Serializable]
-public class L_Audio : ILanguangeContent
-{
-    public AudioClip content;
-}
+    [Serializable]
+    public class L_Image : ILanguangeContent
+    {
+        public Sprite content;
+    }
 
-/// <summary>
-/// Audio localisation content
-/// </summary>
-[Serializable]
-public class L_Video : ILanguangeContent
-{
-    public VideoClip content;
-}
-#endregion
+    /// <summary>
+    /// Audio localisation content
+    /// </summary>
+    [Serializable]
+    public class L_Audio : ILanguangeContent
+    {
+        public AudioClip content;
+    }
 
-/// <summary>
-/// Language model, which define different language possible on the same object
-/// </summary>
-public class LocalizationModel
-{
-    [DictionaryDrawerSettings(DisplayMode = DictionaryDisplayOptions.OneLine, KeyLabel = "Language", ValueLabel = "Value")]
-    public Dictionary<LanguageType, ILanguangeContent> ContentDic = new Dictionary<LanguageType, ILanguangeContent>()
+    /// <summary>
+    /// Audio localisation content
+    /// </summary>
+    [Serializable]
+    public class L_Video : ILanguangeContent
+    {
+        public VideoClip content;
+    }
+    #endregion
+
+    /// <summary>
+    /// Language model, which define different language possible on the same object
+    /// </summary>
+    public class LocalizationModel
+    {
+        [DictionaryDrawerSettings(DisplayMode = DictionaryDisplayOptions.OneLine, KeyLabel = "Language", ValueLabel = "Value")]
+        public Dictionary<LanguageType, ILanguangeContent> ContentDic = new Dictionary<LanguageType, ILanguangeContent>()
     {
         {LanguageType.English, new L_Text()},
         {LanguageType.Francais, new L_Text()}
     };
 
 
-}
+    }
 
-[CreateAssetMenu(fileName ="Localization", menuName ="RPGFramework/LocalizationConfig")]
-public class LocalizationSetting : ConfigBase
-{
-    /// <summary>
-    /// <PackageName,<contentKey, languageValue>>
-    /// </summary>
-    [SerializeField]
-    [DictionaryDrawerSettings(DisplayMode = DictionaryDisplayOptions.OneLine, KeyLabel ="Data package", ValueLabel ="Language Data")]
-    private Dictionary<string, Dictionary<string, LocalizationModel>> DataPackage;
-
-    public T GetContent<T>(string packageName, string contentKey, LanguageType languageType) where T : class, ILanguangeContent
+    [CreateAssetMenu(fileName = "Localization", menuName = "RPGFramework/LocalizationConfig")]
+    public class LocalizationSetting : ConfigBase
     {
-        return DataPackage[packageName][contentKey].ContentDic[languageType] as T;
+        /// <summary>
+        /// <PackageName,<contentKey, languageValue>>
+        /// </summary>
+        [SerializeField]
+        [DictionaryDrawerSettings(DisplayMode = DictionaryDisplayOptions.OneLine, KeyLabel = "Data package", ValueLabel = "Language Data")]
+        private Dictionary<string, Dictionary<string, LocalizationModel>> DataPackage;
+
+        public T GetContent<T>(string packageName, string contentKey, LanguageType languageType) where T : class, ILanguangeContent
+        {
+            return DataPackage[packageName][contentKey].ContentDic[languageType] as T;
+        }
     }
 }

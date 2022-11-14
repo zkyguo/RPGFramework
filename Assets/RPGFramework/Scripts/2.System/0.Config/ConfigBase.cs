@@ -1,10 +1,13 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-/// <summary>
-/// Config base, Character, Weapon etc
-/// </summary>
-public class ConfigBase : SerializedScriptableObject 
+namespace Framework
 {
-    
+    /// <summary>
+    /// Config base, Character, Weapon etc
+    /// </summary>
+    public class ConfigBase : SerializedScriptableObject
+    {
+
+    }
 }

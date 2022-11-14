@@ -3,91 +3,95 @@ using System;
 using UnityEngine;
 using UnityEngine.AI;
 
-/// <summary>
-/// Window result
-/// </summary>
-public enum WindowResult
-{
-    None,
-    Yes,
-    No
-}
 
-/// <summary>
-/// Base class of UI window
-/// </summary>
-public class UIWindowsBase : MonoBehaviour
+namespace Framework
 {
     /// <summary>
-    /// Window type
+    /// Window result
     /// </summary>
-    public Type type
+    public enum WindowResult
     {
-        get { return GetType(); }
+        None,
+        Yes,
+        No
     }
 
     /// <summary>
-    /// Initiate window
+    /// Base class of UI window
     /// </summary>
-    public virtual void Init() 
+    public class UIWindowsBase : MonoBehaviour
     {
-        AddEventListener();
-    }
+        /// <summary>
+        /// Window type
+        /// </summary>
+        public Type type
+        {
+            get { return GetType(); }
+        }
 
-    /// <summary>
-    /// Show window
-    /// </summary>
-    public virtual void Show() 
-    {
-        OnUpdateLanguage();
-    }
+        /// <summary>
+        /// Initiate window
+        /// </summary>
+        public virtual void Init()
+        {
+            AddEventListener();
+        }
 
-    /// <summary>
-    /// Close window
-    /// </summary>
-    public virtual void Close() 
-    {
-        UIManager.Instance.Close(type);
-        RemoveEventListener();
-    }
+        /// <summary>
+        /// Show window
+        /// </summary>
+        public virtual void Show()
+        {
+            OnUpdateLanguage();
+        }
 
-    /// <summary>
-    /// Event when clocs is clicked
-    /// </summary>
-    public virtual void OnCloseClick() 
-    {
-        Close();
-    }    
+        /// <summary>
+        /// Close window
+        /// </summary>
+        public virtual void Close()
+        {
+            UIManager.Instance.Close(type);
+            RemoveEventListener();
+        }
 
-    /// <summary>
-    /// Event when yes is clicked
-    /// </summary>
-    public virtual void OnYesClick() 
-    {
-        Close();
-    }
+        /// <summary>
+        /// Event when clocs is clicked
+        /// </summary>
+        public virtual void OnCloseClick()
+        {
+            Close();
+        }
 
-    /// <summary>
-    /// Register Event listener to window
-    /// </summary>
-    protected virtual void AddEventListener()
-    {
-        EventManager.AddEventListener("UpdateLanguage", OnUpdateLanguage);
-    }
+        /// <summary>
+        /// Event when yes is clicked
+        /// </summary>
+        public virtual void OnYesClick()
+        {
+            Close();
+        }
 
-    /// <summary>
-    /// Remove Event Listener
-    /// </summary>
-    protected virtual void RemoveEventListener() 
-    {
-        EventManager.RemoveEventListener("UpdateLanguage");
-    }
+        /// <summary>
+        /// Register Event listener to window
+        /// </summary>
+        protected virtual void AddEventListener()
+        {
+            EventManager.AddEventListener("UpdateLanguage", OnUpdateLanguage);
+        }
 
-    /// <summary>
-    /// Event to update localization 
-    /// </summary>
-    protected virtual void OnUpdateLanguage()
-    {
+        /// <summary>
+        /// Remove Event Listener
+        /// </summary>
+        protected virtual void RemoveEventListener()
+        {
+            EventManager.RemoveEventListener("UpdateLanguage");
+        }
 
+        /// <summary>
+        /// Event to update localization 
+        /// </summary>
+        protected virtual void OnUpdateLanguage()
+        {
+
+        }
     }
 }

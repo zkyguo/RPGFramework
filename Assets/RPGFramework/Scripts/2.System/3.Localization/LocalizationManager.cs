@@ -3,44 +3,50 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
-/// <summary>
-/// Localization Manager
-/// </summary>
-public class LocalizationManager : BaseManager<LocalizationManager>
+namespace Framework
 {
-    public LocalizationSetting localizationSetting;
 
-    private LanguageType _currentLanguageType;
+    /// <summary>
+    /// Localization Manager
+    /// </summary>
+    public class LocalizationManager : BaseManager<LocalizationManager>
+    {
+        public LocalizationSetting localizationSetting;
 
-    [SerializeField]
-    [OnValueChanged("UpdateLanguage")]
-    public LanguageType CurrentLanguageType { 
+        private LanguageType _currentLanguageType;
 
-        get => _currentLanguageType;
-        set
+        [SerializeField]
+        [OnValueChanged("UpdateLanguage")]
+        public LanguageType CurrentLanguageType
         {
-            _currentLanguageType = value;
-            UpdateLanguage();
+
+            get => _currentLanguageType;
+            set
+            {
+                _currentLanguageType = value;
+                UpdateLanguage();
+            }
+        }
+
+        private void UpdateLanguage()
+        {
+#if UNITY_EDITOR
+            GameRoot.InitEditor();
+#endif
+            EventManager.EventTrigger("UpdateLanguage");
+        }
+
+        /// <summary>
+        /// Get the content of current localizationSetting
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="packageName"></param>
+        /// <param name="contentKey"></param>
+        /// <returns></returns>
+        public T GetContent<T>(string packageName, string contentKey) where T : class, ILanguangeContent
+        {
+            return localizationSetting.GetContent<T>(packageName, contentKey, CurrentLanguageType);
         }
     }
 
-    private void UpdateLanguage()
-    {
-#if UNITY_EDITOR
-        GameRoot.InitEditor();
-#endif
-        EventManager.EventTrigger("UpdateLanguage");
-    }
-
-    /// <summary>
-    /// Get the content of current localizationSetting
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="packageName"></param>
-    /// <param name="contentKey"></param>
-    /// <returns></returns>
-    public T GetContent<T>(string packageName, string contentKey) where T : class, ILanguangeContent
-    {
-        return localizationSetting.GetContent<T>(packageName, contentKey, CurrentLanguageType);
-    }
 }
